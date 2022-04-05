@@ -20,7 +20,10 @@ public class Api
         var todoController = webAppContext.getTodoController();
 
 
-        options("/", (request, response) -> Map.of("message", "TODOS API V1"), gson::toJson);
+        options("/", (request, response) -> {response.header("Content-Type", "applications/json");
+            return Map.of("message", "TODOS API V1",
+                    "find-all","/api/v1/todos",
+                    "find-by-status","/api/v1/todos/{status}");}, gson::toJson);
 
         path("/api/v1/todos", () -> {
             before("/*", (q, a) -> LOG.info("Received api call"));

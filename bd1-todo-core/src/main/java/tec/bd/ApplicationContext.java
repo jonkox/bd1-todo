@@ -3,7 +3,7 @@ package tec.bd;
 import tec.bd.todo.Todo;
 import tec.bd.todo.TodoRecord;
 import tec.bd.todo.repository.TodoRepository;
-import tec.bd.todo.repository.TodoRepositoryListImpl;
+//import tec.bd.todo.repository.TodoRepositoryListImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class ApplicationContext {
         if(null != todoRepository) {
             appContext.todoRepository = todoRepository;
         } else {
-            appContext.todoRepository = new TodoRepositoryListImpl(todoRecordList);
+            //appContext.todoRepository = new TodoRepositoryListImpl(todoRecordList);
         }
     }
 

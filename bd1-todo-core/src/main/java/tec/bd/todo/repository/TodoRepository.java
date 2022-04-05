@@ -3,6 +3,7 @@ package tec.bd.todo.repository;
 import tec.bd.todo.Status;
 import tec.bd.todo.TodoRecord;
 
+import java.util.Date;
 import java.util.List;
 
 public interface TodoRepository {
@@ -16,5 +17,11 @@ public interface TodoRepository {
     TodoRecord save(TodoRecord todoRecord);
 
     void remove(TodoRecord todoRecord);
+
+    List<TodoRecord> findByPatternInTitle(String textToSearch);
+
+    List<TodoRecord> findByBetweenStartDates(Date startDate, Date endDate);
+
+    TodoRecord update(TodoRecord todoRecord);
 
 }

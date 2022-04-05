@@ -23,7 +23,7 @@ public class TodoTest {
 
         Todo todo = new Todo(todoRepository);
         TodoRecord newRecord = new TodoRecord("Tomar desayuno");
-        var actual = todo.add(newRecord);
+        var actual = todo.addTodoRecord(newRecord);
 
         assertThat(actual).isNotNull();
         assertThat(actual.getId()).isNotNull();
@@ -54,8 +54,8 @@ public class TodoTest {
         var todoRepository = mock(TodoRepository.class);
 
         Todo todo = new Todo(todoRepository);
-        todo.add(desayuno);
-        todo.add(almuerzo);
+        todo.addTodoRecord(desayuno);
+        todo.addTodoRecord(almuerzo);
         todo.delete(desayuno);
 
         verify(todoRepository, times(1)).remove(desayuno);
@@ -95,9 +95,9 @@ public class TodoTest {
         Todo todo = new Todo(todoRepository);
 
 
-        todo.add(desayuno);
-        todo.add(almuerzo);
-        todo.add(cena);
+        todo.addTodoRecord(desayuno);
+        todo.addTodoRecord(almuerzo);
+        todo.addTodoRecord(cena);
 
         var actual = todo.getAll(Status.IN_PROGRESS);
 
@@ -120,9 +120,9 @@ public class TodoTest {
 
         Todo todo = new Todo(todoRepository);
 
-        todo.add(desayuno);
-        todo.add(almuerzo);
-        todo.add(cena);
+        todo.addTodoRecord(desayuno);
+        todo.addTodoRecord(almuerzo);
+        todo.addTodoRecord(cena);
 
         var actual = todo.getAll(Status.FINISHED);
 

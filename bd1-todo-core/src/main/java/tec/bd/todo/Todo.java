@@ -2,6 +2,7 @@ package tec.bd.todo;
 
 import tec.bd.todo.repository.TodoRepository;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -27,7 +28,7 @@ public class Todo {
         return this.todoRepository.findById(id);
     }
 
-    public TodoRecord add(TodoRecord record) {
+    public TodoRecord addTodoRecord(TodoRecord record) {
         Objects.requireNonNull(record);
         // Si el titulo es nulo, devolver exception
         if(null == record.getStartDate()) {
@@ -45,5 +46,28 @@ public class Todo {
         // TODO: buscar si el record existe, y si existe borrarlo
         this.todoRepository.remove(record);
     }
+
+
+    public List<TodoRecord> getStartDateRange(Date startDate, Date endDate){
+        List<TodoRecord> todoRecordList = this.todoRepository.findByBetweenStartDates(startDate,endDate);
+
+        if (todoRecordList.isEmpty()){
+            System.out.println("No existen TODOs dentro del rango de fechas.");
+        }
+        return todoRecordList;
+    }
+    public List<TodoRecord> searchInTitle(String textToSearch){
+        List<TodoRecord> todoRecordList = new ArrayList<>();
+
+        return todoRecordList;
+    }
+    public TodoRecord updateTodoRecord(TodoRecord todoRecord){
+        return todoRecord;
+    }
+    public void deleteTodoRecord(String id){
+        var deletedToDo = this.todoRepository.findById(id);
+    }
+
+
 
 }

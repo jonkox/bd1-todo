@@ -3,7 +3,6 @@ package tec.bd.controller;
 import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
-import tec.bd.ApplicationContext;
 import tec.bd.todo.Status;
 import tec.bd.todo.Todo;
 import tec.bd.todo.TodoRecord;
@@ -61,7 +60,7 @@ public class TodoController {
         var todoRecord = GSON.fromJson(request.body(), TodoRecord.class);
         //TODO: si hay una exception capturar y retornar 500
 
-        var newTodo = this.todo.add(todoRecord);
+        var newTodo = this.todo.addTodoRecord(todoRecord);
 
         response.header("Content-Type", "application/json");
         response.header("Location", "/todos/" + newTodo.getId());
