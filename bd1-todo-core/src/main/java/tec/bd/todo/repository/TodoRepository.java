@@ -16,7 +16,14 @@ public interface TodoRepository {
 
     TodoRecord save(TodoRecord todoRecord);
 
-    void remove(TodoRecord todoRecord);
+    void remove(String id);
+
+    TodoRecord update(TodoRecord todoRecord);
+
+    List<TodoRecord> findByPatternInTitle(String textToSearch);
+
+    List<TodoRecord> findByBetweenStartDates(Date startDate, Date endDate);
+
 
     List<TodoRecord> findByPatternInTitle(String textToSearch);
 

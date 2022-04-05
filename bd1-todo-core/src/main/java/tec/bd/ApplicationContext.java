@@ -34,9 +34,10 @@ public class ApplicationContext {
     private static void initTodoRepository(ApplicationContext appContext, TodoRepository todoRepository) {
         if(null != todoRepository) {
             appContext.todoRepository = todoRepository;
-        } else {
-            //appContext.todoRepository = new TodoRepositoryListImpl(todoRecordList);
         }
+//        } else {
+//            appContext.todoRepository = new TodoRepositoryListImpl(todoRecordList);
+//        }
     }
 
     private static Todo initTodo(TodoRepository todoRepository) {

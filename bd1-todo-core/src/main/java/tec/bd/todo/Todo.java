@@ -38,13 +38,24 @@ public class Todo {
         return this.todoRepository.save(record);
     }
 
-    public void delete(TodoRecord record) {
-//        var elementToDelete = this.getById(record.getId());
-//        if (null != elementToDelete) {
-//            this.todoRepository.remove(elementToDelete);
-//        }
+    public TodoRecord update(TodoRecord record) {
+        Objects.requireNonNull(record);
+
+        // TODO: si el todoRecord.Id no existe, lanzar exception
+        // el registro a actualizar tiene que existir.
+
+        // Si el titulo es nulo, devolver exception
+        if(null == record.getStartDate()) {
+            record.setStartDate(new Date());
+        }
+
+        return this.todoRepository.update(record);
+    }
+
+    public void delete(String id) {
+
         // TODO: buscar si el record existe, y si existe borrarlo
-        this.todoRepository.remove(record);
+        this.todoRepository.remove(id);
     }
 
 
