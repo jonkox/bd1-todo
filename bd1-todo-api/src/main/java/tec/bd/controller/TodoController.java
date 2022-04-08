@@ -3,15 +3,13 @@ package tec.bd.controller;
 import com.google.gson.Gson;
 import spark.Request;
 import spark.Response;
-import tec.bd.ApplicationContext;
 import tec.bd.Message;
 import tec.bd.todo.Status;
 import tec.bd.todo.Todo;
 import tec.bd.todo.TodoRecord;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -51,6 +49,10 @@ public class TodoController {
 
         var status = request.params("todo-status");
         // TODO: Si el status es nulo lanzar exception o devolver 404
+
+        if (status.equals(null))
+            response.status(404);
+
         var todoStatus = Status.valueOf(status.toUpperCase());
 
         var todoRecords = this.todo.getAll(todoStatus);
@@ -68,9 +70,15 @@ public class TodoController {
 
         var newTodo = this.todo.addTodoRecord(todoRecord);
 
-        response.header("Content-Type", "application/json");
-        response.header("Location", "/todos/" + newTodo.getId());
-        response.status(201);
+        if (newTodo.equals(TodoRecord.class)){
+            response.status(500);
+        }
+        else {
+
+            response.header("Content-Type", "application/json");
+            response.header("Location", "/todos/" + newTodo.getId());
+            response.status(201);
+        }
         return newTodo;
 
     }
@@ -80,7 +88,7 @@ public class TodoController {
         // TODO: Si el todoId es nulo lanzar exception o devolver 404
 
         // TODO: poner try/catch aqui porque si el borrado falla no deberia retornar 200-OK
-        this.todo.delete(todoId);
+        this.todo.deleteTodoRecord(todoId);
         response.status(200);
         return new Message(200, "OK");
     }
@@ -90,7 +98,7 @@ public class TodoController {
         var todoRecord = GSON.fromJson(request.body(), TodoRecord.class);
         //TODO: si hay una exception capturar y retornar 500
 
-        var newTodo = this.todo.update(todoRecord);
+        var newTodo = this.todo.updateTodoRecord(todoRecord);
 
         response.header("Content-Type", "application/json");
         response.header("Location", "/todos/" + newTodo.getId());
@@ -99,16 +107,16 @@ public class TodoController {
 
     }
 
-    public List<Todo> searchInTitle(Request request, Response response) {
+    public List<TodoRecord> searchInTitle(Request request, Response response) {
 
         var textToSearch = request.queryParams("q");
+        var results = this.todo.searchInTitle(textToSearch);
+        response.header("Content-Type", "application/json");
 
-        System.out.println(textToSearch);
-
-        return Collections.emptyList();
+        return results;
     }
 
-    public List<Todo> startDateRange(Request request, Response response) {
+    public List<TodoRecord> startDateRange(Request request, Response response) {
         var start = request.queryParams("start");
         var end = request.queryParams("end");
 
@@ -116,15 +124,16 @@ public class TodoController {
         try {
             var startDate = formatter.parse(start);
             var endDate = formatter.parse(end);
-            System.out.println("Start :" + startDate + ", End: " + endDate);
+            var results = this.todo.getStartDateRange(startDate,endDate);
+            response.header("Content-Type", "application/json");
+
+            return results;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-
-
-
-        return Collections.emptyList();
+        return null;
     }
 
 }

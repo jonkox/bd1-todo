@@ -21,7 +21,14 @@ public class TodoRepositoryListImpl implements TodoRepository {
 
     @Override
     public List<TodoRecord> findAll(Status status) {
-        return null;
+        List<TodoRecord> todoRecords = new ArrayList<>();
+
+        for (TodoRecord i: this.todoData) {
+            if (i.getStatus().equals(status))
+                todoRecords.add(i);
+        }
+
+        return todoRecords;
     }
 
     @Override
@@ -42,7 +49,10 @@ public class TodoRepositoryListImpl implements TodoRepository {
     }
 
     @Override
-    public void remove(TodoRecord todoRecord) {
+    public void remove(String id) {
+        var todoRecord = this.findById(id);
+
+        this.todoData.remove(todoRecord);
 
     }
 
@@ -83,7 +93,8 @@ public class TodoRepositoryListImpl implements TodoRepository {
         todo.setStatus(todoRecord.getStatus());
 
 
-        return null;
+        return todo;
     }
+
 
 }

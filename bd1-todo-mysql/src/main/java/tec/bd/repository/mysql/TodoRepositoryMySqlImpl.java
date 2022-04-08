@@ -4,24 +4,21 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 import tec.bd.todo.repository.TodoRepository;
 import tec.bd.todo.*;
 
 public class TodoRepositoryMySqlImpl extends BaseRepository<TodoRecord> implements TodoRepository {
-
-
-    private final static String CONNECTION_STRING = "jdbc:mysql://localhost:3306/todo";
-    private final static String DB_USERNAME = "root";
-    private final static String DB_PASSWORD = "diazcoto1112";
 
     private final static String SELECT_ALL_TODOS = "select tid, title, description, state, startdate, enddate from todorecord";
     private final static String SELECT_BY_STATUS =  "select tid, title, description, state, startdate, enddate from todorecord where state = ?";
     private final static String DELETE_BY_ID = "delete from todorecord where tid = ?";
     private final static String SELECT_BY_ID = "select tid, title, description, state, startdate, enddate from todorecord where tid = ?";
     private final static String INSERT_TODO = "insert into todorecord(tid, title, description, state, startdate, enddate) values (?, ?, ?, ?, ?, ?)";
-    private final static String SELECT_BY_TEXT_IN_TITLE = "select * from todorecord where title like ?";
-
-
+    private final static String SELECT_BY_TEXT_IN_TITLE = "select tid, title, description, state, startdate, enddate from todorecord where title like ?";
+    private final static String SELECT_BY_STARTDATE = "select tid, title, description, state, startdate, enddate from todorecord where startdate between ? and ?";
+    private final static String UPDATE = "update todorecord set title = ?, description = ?, state = ?, startdate = ?, enddate = ? where tid = ?";
 
     @Override
     public List<TodoRecord> findAll() {
@@ -87,6 +84,34 @@ public class TodoRepositoryMySqlImpl extends BaseRepository<TodoRecord> implemen
 
     @Override
     public TodoRecord save(TodoRecord todoRecord) {
+        try {
+
+            var connect = this.connect();
+            var statement = connect.prepareStatement(INSERT_TODO);
+
+            statement.setString(1, todoRecord.getId());
+            statement.setString(2, todoRecord.getTitle());
+            statement.setString(3, todoRecord.getDescription());
+            statement.setString(4, todoRecord.getStatus().toString().toLowerCase());
+            statement.setDate(5, new java.sql.Date(todoRecord.getStartDate().getTime()));
+
+            if(null != todoRecord.getEndDate()) {
+                statement.setDate(6, new java.sql.Date(todoRecord.getEndDate().getTime()));
+            } else {
+                statement.setDate(6, null);
+            }
+
+            var actual = this.execute(statement);
+            //var resultSet = this.query(statement);
+
+
+            return todoRecord;
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 
@@ -101,21 +126,6 @@ public class TodoRepositoryMySqlImpl extends BaseRepository<TodoRecord> implemen
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public TodoRecord update(TodoRecord todoRecord) {
-        return null;
-    }
-
-    @Override
-    public List<TodoRecord> findByPatternInTitle(String textToSearch) {
-        return null;
-    }
-
-    @Override
-    public List<TodoRecord> findByBetweenStartDates(Date startDate, Date endDate) {
-        return null;
     }
 
     @Override
@@ -136,36 +146,24 @@ public class TodoRepositoryMySqlImpl extends BaseRepository<TodoRecord> implemen
 
         return null;
     }
+
     @Override
     public List<TodoRecord> findByPatternInTitle(String textToSearch) {
         var todoRecordList = new ArrayList<TodoRecord>();
 
         try {
-            try (Connection connection = DriverManager.getConnection(CONNECTION_STRING, DB_USERNAME, DB_PASSWORD)) {
-
-                try (Statement stmt = connection.createStatement()) {
-                    //execute query -- consultas de seleccion
-                    try (ResultSet resultSet = stmt.executeQuery(SELECT_BY_PATERN_IN_TITLE  + '%' + textToSearch.toLowerCase() +'%')) {
-//                        System.out.println("ID\t\t Title\t\t Description\t\t Status \t\t Start Date \t\t End Date");
-//                        System.out.println("-------------------------------------------------------------------------");
-                        while(resultSet.next()) {
-
-                            var todoRecord = new TodoRecord(
-                                    resultSet.getString("title"),
-                                    resultSet.getString("description"),
-                                    Status.valueOf(resultSet.getString("state").toUpperCase()),
-                                    resultSet.getDate("startdate"),
-                                    resultSet.getDate("enddate")
-                            );
-                            todoRecord.setId(resultSet.getString("tid"));
-                            todoRecordList.add(todoRecord);
-
-                        }
-                    }
+            var connect = this.connect();
+            var statement = connect.prepareStatement(SELECT_BY_TEXT_IN_TITLE);
+            statement.setString(1, '%' + textToSearch + '%');
+            var resultSet = this.query(statement);
+            while(resultSet.next()) {
+                var todoRecord = toEntity(resultSet);
+                if(null != todoRecord) {
+                    todoRecordList.add(todoRecord);
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Hubo un error");
+            e.printStackTrace();
         }
 
         return todoRecordList;
@@ -173,12 +171,50 @@ public class TodoRepositoryMySqlImpl extends BaseRepository<TodoRecord> implemen
 
     @Override
     public List<TodoRecord> findByBetweenStartDates(Date startDate, Date endDate) {
-        return null;
+        var todoRecordList = new ArrayList<TodoRecord>();
+
+        try {
+            var connect = this.connect();
+            var statement = connect.prepareStatement(SELECT_BY_STARTDATE);
+            statement.setDate(1, new java.sql.Date(startDate.getTime()));
+            statement.setDate(2, new java.sql.Date(endDate.getTime()));
+            var resultSet = this.query(statement);
+            while(resultSet.next()) {
+                var todoRecord = toEntity(resultSet);
+                if(null != todoRecord) {
+                    todoRecordList.add(todoRecord);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return todoRecordList;
     }
 
     @Override
     public TodoRecord update(TodoRecord todoRecord) {
-        return null;
+
+        try {
+            var connect = this.connect();
+            var statement = connect.prepareStatement(UPDATE);
+
+            statement.setString(1, todoRecord.getTitle());
+            statement.setString(2, todoRecord.getDescription());
+            statement.setString(3, todoRecord.getStatus().toString().toLowerCase());
+            statement.setTimestamp(4, new java.sql.Timestamp(todoRecord.getStartDate().getTime()));
+            statement.setTimestamp(5, new java.sql.Timestamp(todoRecord.getEndDate().getTime()));
+            statement.setString(6, todoRecord.getId());
+            var actual = this.execute(statement);
+            System.out.println("Actual: " + actual);
+
+            return todoRecord;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return todoRecord;
     }
 
 }

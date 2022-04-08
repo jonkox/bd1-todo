@@ -18,13 +18,6 @@ public interface TodoRepository {
 
     void remove(String id);
 
-    TodoRecord update(TodoRecord todoRecord);
-
-    List<TodoRecord> findByPatternInTitle(String textToSearch);
-
-    List<TodoRecord> findByBetweenStartDates(Date startDate, Date endDate);
-
-
     List<TodoRecord> findByPatternInTitle(String textToSearch);
 
     List<TodoRecord> findByBetweenStartDates(Date startDate, Date endDate);

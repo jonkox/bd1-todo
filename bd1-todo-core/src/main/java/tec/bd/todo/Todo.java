@@ -25,39 +25,41 @@ public class Todo {
 
     public TodoRecord getById(String id) {
         // TODO: validar que el id no sea nulo y si es nulo lanzar una excepcion
-        return this.todoRepository.findById(id);
+        try {
+            if (id.equals(null))
+                throw new IllegalArgumentException();
+
+            else {
+                return this.todoRepository.findById(id);
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+
+        }
+
+        return null;
     }
 
     public TodoRecord addTodoRecord(TodoRecord record) {
         Objects.requireNonNull(record);
         // Si el titulo es nulo, devolver exception
-        if(null == record.getStartDate()) {
-            record.setStartDate(new Date());
-        }
-        record.setStatus(Status.NEW);
-        return this.todoRepository.save(record);
-    }
+        try {
+            if (record.getTitle().equals(null))
+                throw new IllegalArgumentException();
 
-    public TodoRecord update(TodoRecord record) {
-        Objects.requireNonNull(record);
+            if(null == record.getStartDate()) {
+                record.setStartDate(new Date());
+            }
+            record.setStatus(Status.NEW);
 
-        // TODO: si el todoRecord.Id no existe, lanzar exception
-        // el registro a actualizar tiene que existir.
-
-        // Si el titulo es nulo, devolver exception
-        if(null == record.getStartDate()) {
-            record.setStartDate(new Date());
+            return this.todoRepository.save(record);
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
-        return this.todoRepository.update(record);
+        return record;
     }
-
-    public void delete(String id) {
-
-        // TODO: buscar si el record existe, y si existe borrarlo
-        this.todoRepository.remove(id);
-    }
-
 
     public List<TodoRecord> getStartDateRange(Date startDate, Date endDate){
         List<TodoRecord> todoRecordList = this.todoRepository.findByBetweenStartDates(startDate,endDate);
@@ -67,16 +69,55 @@ public class Todo {
         }
         return todoRecordList;
     }
-    public List<TodoRecord> searchInTitle(String textToSearch){
-        List<TodoRecord> todoRecordList = new ArrayList<>();
 
-        return todoRecordList;
+    public List<TodoRecord> searchInTitle(String textToSearch){
+        return this.todoRepository.findByPatternInTitle(textToSearch);
     }
+
     public TodoRecord updateTodoRecord(TodoRecord todoRecord){
+        Objects.requireNonNull(todoRecord);
+        // TODO: si el todoRecord.Id no existe, lanzar exception
+        var todo = this.todoRepository.findById(todoRecord.getId());
+
+        // el registro a actualizar tiene que existir.
+        // Si el titulo es nulo, devolver exception
+        try {
+
+            //Validacion de datos
+            if (todo.equals(null))
+                throw new IllegalArgumentException();
+
+            if (todo.getTitle().isEmpty() || todo.getTitle().isBlank())
+                throw new IllegalStateException();
+
+
+            this.todoRepository.update(todoRecord);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         return todoRecord;
     }
+
     public void deleteTodoRecord(String id){
-        var deletedToDo = this.todoRepository.findById(id);
+        // TODO: buscar si el record existe, y si existe borrarlo
+
+        try {
+            var deletedToDo = this.todoRepository.findById(id);
+
+            if (id.equals(null) || deletedToDo.equals(null))
+                throw new IllegalArgumentException();
+
+            this.todoRepository.remove(id);
+
+        }catch (Exception e){
+
+            e.printStackTrace();
+        }
+
+
+
+
+
     }
 
 

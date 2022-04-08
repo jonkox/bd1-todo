@@ -25,13 +25,9 @@ public class Api
                 return Map.of(
                         "message", "TODOS API V1",
                         "find-all", "/api/v1/todos",
-                        "find-by-status", "/api/v1/todos/{status}");
+                        "find-by-status", "/api/v1/todos/{status}",
+                            "findByPatternInTitle", "/api/v1/todos/{pattern}");
         }, gson::toJson);
-
-        options("/", (request, response) -> {response.header("Content-Type", "applications/json");
-            return Map.of("message", "TODOS API V1",
-                    "find-all","/api/v1/todos",
-                    "find-by-status","/api/v1/todos/{status}");}, gson::toJson);
 
         path("/api/v1/todos", () -> {
             before("/*", (q, a) -> LOG.info("Received api call"));
@@ -40,7 +36,7 @@ public class Api
 
             get("/status/:todo-status", todoController::getTodosByStatus, gson::toJson);
 
-            get("/title", todoController::searchInTitle, gson::toJson);
+            get("/title/:text-to-search", todoController::searchInTitle, gson::toJson);
 
             get("/startDate", todoController::startDateRange, gson::toJson);
 

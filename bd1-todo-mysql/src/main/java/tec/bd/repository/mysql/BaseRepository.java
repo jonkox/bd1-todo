@@ -4,9 +4,9 @@ import java.sql.*;
 
 public abstract class BaseRepository<T> {
 
-    protected final static String CONNECTION_STRING = "jdbc:mysql://localhost:3306/todo";
+    protected final static String CONNECTION_STRING = "jdbc:mysql://localhost:3306/todo?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
     protected final static String DB_USERNAME = "root";
-    protected final static String DB_PASSWORD = "rootroot";
+    protected final static String DB_PASSWORD = "diazcoto1112";
 
 
     protected Connection connect() throws SQLException {
