@@ -1,0 +1,131 @@
+{
+	"info": {
+		"_postman_id": "ff4b4f18-0027-4db4-8924-15929a1834b0",
+		"name": "bd1-todo-auth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "OptionsAuth",
+			"request": {
+				"method": "OPTIONS",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find All Clients",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ":8080/clients",
+					"port": "8080",
+					"path": [
+						"clients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Client",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"clientId\": \"un-cliente\",\r\n    \"clientSecret\": \"el-password\"\r\n}"
+				},
+				"url": {
+					"raw": ":8080/clients",
+					"port": "8080",
+					"path": [
+						"clients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Client",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": ":8080/clients/un-cliente",
+					"port": "8080",
+					"path": [
+						"clients",
+						"un-cliente"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Session",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"clientId\": \"un-cliente\",\r\n    \"clientSecret\": \"el-password\"\r\n}"
+				},
+				"url": {
+					"raw": ":8080/sessions",
+					"port": "8080",
+					"path": [
+						"sessions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find All Sessions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ":8080/sessions",
+					"port": "8080",
+					"path": [
+						"sessions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find By Session Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ":8080/sessions/validate?session=e1dbe86c-e797-11ec-be34-18c04d37801a",
+					"port": "8080",
+					"path": [
+						"sessions",
+						"validate"
+					],
+					"query": [
+						{
+							"key": "session",
+							"value": "e1dbe86c-e797-11ec-be34-18c04d37801a"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

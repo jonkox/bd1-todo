@@ -36,6 +36,7 @@ public class AuthApi {
         post("/clients", (request, response) -> {
             var credentials = gson.fromJson(request.body(), ClientCredentials.class);
             sessionService.addNewClient(credentials);
+            System.out.println("Un nuevo cliente se agregó a la base de datos");
             return credentials;
         }, gson::toJson);
 
@@ -43,7 +44,7 @@ public class AuthApi {
             var clientId = request.params("client-id");
             sessionService.deleteClient(clientId);
             response.status(200);
-            return Map.of("Deleted", "OK");
+            return Map.of("Deleted", request.params("client-id"));
         }, gson::toJson);
 
         get("/sessions", (request, response) -> {

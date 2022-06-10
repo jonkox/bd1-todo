@@ -16,9 +16,9 @@ public class SessionRepositoryImpl extends BaseRepository<Session> implements Se
 
     private static String FIND_ALL_SESSION_QUERY = "select clientid,sessionid,createdat, if(minute(timediff(utc_timestamp(), createdat)) <= 30, \"ACTIVE\", \"INACTIVE\" ) as sessionStatus from sessions order by createdat asc";
     // TODO: cambiar por procedimiento almacenado
-    private static String FIND_BY_SESSION_QUERY = "select clientid,sessionid,createdat, if(minute(timediff(utc_timestamp(), createdat)) <= 30, \"ACTIVE\", \"INACTIVE\" ) as sessionStatus from sessions where sessionid = ?";
+    private static String FIND_BY_SESSION_QUERY =  "{call validate_session(?,?)}";      //"select clientid,sessionid,createdat, if(minute(timediff(utc_timestamp(), createdat)) <= 30, \"ACTIVE\", \"INACTIVE\" ) as sessionStatus from sessions where sessionid = ?";
     // TODO: cambiar por procedimiento almacenado
-    private static String SAVE_SESSION_QUERY = "insert into sessions(clientid, sessionid, createdat) values (?, ?, ?)";
+    private static String SAVE_SESSION_QUERY = "{call create_session(?,?)}"; //"insert into sessions(clientid, sessionid, createdat) values (?, ?, ?)";
     private static String UPDATE_SESSION_QUERY = "update sessions set sessionid = ?, createdat = ? where clientid = ?";
 
 
@@ -52,7 +52,9 @@ public class SessionRepositoryImpl extends BaseRepository<Session> implements Se
             var connection = this.connect();
             var statement = connection.prepareStatement(FIND_BY_SESSION_QUERY);
             statement.setString(1, sessionId);
+            statement.setString(2, "30");
             var resultSet = this.query(statement);
+
             while(resultSet.next()) {
                 var client = toEntity(resultSet);
                 return client;
@@ -70,8 +72,8 @@ public class SessionRepositoryImpl extends BaseRepository<Session> implements Se
             var connection = this.connect();
             var statement = connection.prepareStatement(SAVE_SESSION_QUERY);
             statement.setString(1, session.getClientId());
-            statement.setString(2, session.getSessionId());
-            statement.setTimestamp(3, new Timestamp(session.getCreatedAt().getTime()));
+            statement.setString(2, "30");
+            //statement.setTimestamp(3, new Timestamp(session.getCreatedAt().getTime()));
 
             var actual = this.execute(statement);
 
