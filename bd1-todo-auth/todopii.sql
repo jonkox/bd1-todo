@@ -11,7 +11,7 @@ SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0;
 
 -- Creating database
 -- ----------------------------------------------
-drop database todopii;
+drop database if exists todopii;
 create database todopii;
 use todopii;
 -- ----------------------------------------------
