@@ -1,20 +1,22 @@
 {
 	"info": {
-		"_postman_id": "67dbb693-50f5-428f-90f7-c2d3a6b456b8",
+		"_postman_id": "b0572fc0-32a2-4731-9b5e-f4efed47f391",
 		"name": "bd1-todo-api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "00. Options",
+			"name": "01. Options",
 			"request": {
 				"method": "OPTIONS",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}",
+					"raw": "http://localhost:4567",
+					"protocol": "http",
 					"host": [
-						"{{base_url}}"
-					]
+						"localhost"
+					],
+					"port": "4567"
 				}
 			},
 			"response": []
@@ -23,12 +25,20 @@
 			"name": "01. Find All",
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "x-session-id",
+						"value": "3",
+						"type": "default"
+					}
+				],
 				"url": {
-					"raw": "{{base_url}}/api/v1/todos",
+					"raw": "http://localhost:8081/api/v1/todos",
+					"protocol": "http",
 					"host": [
-						"{{base_url}}"
+						"localhost"
 					],
+					"port": "8081",
 					"path": [
 						"api",
 						"v1",
@@ -44,7 +54,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}/api/v1/todos/status/new",
+					"raw": "{{base_url}}/api/v1/todos/status/BLOCKED",
 					"host": [
 						"{{base_url}}"
 					],
@@ -53,7 +63,7 @@
 						"v1",
 						"todos",
 						"status",
-						"new"
+						"BLOCKED"
 					]
 				}
 			},
@@ -66,7 +76,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"title\": \"Ir al supermercado\",\n}",
+					"raw": "{\n    \"id\": \"todo\",\n    \"title\": \"Ir al supermercado\",\n    \"description\": \"comprar los vegetales\",\n    \"status\": \"NEW\",\n    \"startDate\":\"2022-04-07\",\n    \"endDate\":\"2022-04-09\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -93,13 +103,15 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}/todos/id",
+					"raw": "{{base_url}}/api/v1/todos/todo",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
+						"api",
+						"v1",
 						"todos",
-						"id"
+						"todo"
 					]
 				}
 			},
@@ -112,7 +124,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\": \"\",\n    \"title\": \"\"\n}",
+					"raw": "{\n    \"id\": \"todo\",\n    \"title\": \"carrera\",\n    \"description\": \"ver la carrera\",\n    \"status\":\"BLOCKED\",\n    \"startDate\": \"2022-01-01\",\n    \"endDate\": \"2022-07-07\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -120,11 +132,13 @@
 					}
 				},
 				"url": {
-					"raw": "{{base_url}}/todos",
+					"raw": "{{base_url}}/api/v1/todos",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
+						"api",
+						"v1",
 						"todos"
 					]
 				}
@@ -137,7 +151,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}/api/v1/todos/id",
+					"raw": "{{base_url}}/api/v1/todos/todo",
 					"host": [
 						"{{base_url}}"
 					],
@@ -145,7 +159,7 @@
 						"api",
 						"v1",
 						"todos",
-						"id"
+						"todo"
 					]
 				}
 			},
@@ -153,11 +167,23 @@
 		},
 		{
 			"name": "08. Search by start date range",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{base_url}}/api/v1/todos/startDate?start=2022-03-10&end=2022-03-17",
+					"raw": "{{base_url}}/api/v1/todos/startDate?start=2022-04-08&end=2022-04-09",
 					"host": [
 						"{{base_url}}"
 					],
@@ -170,11 +196,11 @@
 					"query": [
 						{
 							"key": "start",
-							"value": "2022-03-10"
+							"value": "2022-04-08"
 						},
 						{
 							"key": "end",
-							"value": "2022-03-17"
+							"value": "2022-04-09"
 						}
 					]
 				}
@@ -182,12 +208,12 @@
 			"response": []
 		},
 		{
-			"name": "09. Search text in Title",
+			"name": "07. Search text in Title",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{base_url}}/api/v1/todos/title?q=desayuno",
+					"raw": "{{base_url}}/api/v1/todos/title/title?q=al",
 					"host": [
 						"{{base_url}}"
 					],
@@ -195,12 +221,13 @@
 						"api",
 						"v1",
 						"todos",
+						"title",
 						"title"
 					],
 					"query": [
 						{
 							"key": "q",
-							"value": "desayuno"
+							"value": "al"
 						}
 					]
 				}

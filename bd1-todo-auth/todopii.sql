@@ -63,9 +63,9 @@ begin
         select if(count(*) = 1, true, false) into session_exists from sessions where clientid = client_id_param;
         if session_exists then
 			-- select 'cliente existe, sesion existe';
-            select minute(timediff(utc_timestamp(),createdat)) into session_diff from sessions where clientid = client_id_param;
+            select if(timestampdiff(minute, createdat, utc_timestamp()) <= time_valid, "ACTIVE", "INACTIVE") as sessionStatus from sessions where clientId = client_id_param;
             if session_diff <= time_valid then
-				select clientid,sessionid,createdat, if(minute(timediff(utc_timestamp(), createdat)) <= 30, 'ACTIVE', 'INACTIVE') as sessionStatus from sessions where clientid = client_id_param;
+				select clientid,sessionid,createdat, if(timestampdiff(minute, createdat, utc_timestamp()) <= time_valid, "ACTIVE", "INACTIVE") as sessionStatus from sessions where clientid = client_id_param;
 				-- select 'cliente existe, session existe, session activa';
 			else
 				-- select 'cliente existe, session existe, session inactiva';
@@ -73,7 +73,7 @@ begin
                 update sessions set createdat = utc_timestamp() where clientid = client_id_param;
                 commit;
                 
-                select clientid,sessionid,createdat, if(minute(timediff(utc_timestamp(), createdat)) <= 30, 'ACTIVE', 'INACTIVE') as sessionStatus from sessions where clientid = client_id_param;
+                select clientid,sessionid,createdat, if(timestampdiff(minute, createdat, utc_timestamp()) <= time_valid, "ACTIVE", "INACTIVE") as sessionStatus from sessions where clientid = client_id_param;
                 
 			end if;
 		else 
@@ -106,8 +106,7 @@ begin
 	select if(count(*) = 1, true, false) into session_exists from sessions where sessionid = session_id_param;
     
     if session_exists = true then
-    
-		select clientid,sessionid,createdat, if(minute(timediff(utc_timestamp(), createdat)) <= time_valid, 'ACTIVE', 'INACTIVE') as sessionStatus from sessions where sessionid = session_id_param;
+		select clientid,sessionid,createdat, if(timestampdiff(minute, createdat, utc_timestamp()) <= time_valid, "ACTIVE", "INACTIVE") as sessionStatus from sessions where sessionid = session_id_param;
         
     else
     
@@ -133,8 +132,8 @@ insert into clients(clientid,clientSecret) values ('Daniel','1234');
 insert into sessions(sessionid,clientid,createdat) values ('3','jonko',now());
 
 
-select * from clients;
-select * from sessions;
+-- select * from clients;
+-- select * from sessions;
 
 -- Caso 1: Sesion Invalida
 call validate_session('1',30);
@@ -149,13 +148,6 @@ call create_session('jonko',30);
 call create_session('cliente-43',30);
 
 
-select minute(timediff(utc_timestamp(), '2022-06-11 01:02:20'));
-select timestampdiff(minute, now(), utc_timestamp()) as theDiff from sessions;
-select createdat, timestampdiff(minute, createdat, utc_timestamp()) as sessionStatus from sessions;
-select utc_timestamp;
-
-
-select if(timestampdiff(minute, createdat, utc_timestamp()) <= 30, "ACTIVE", "INACTIVE") as sessionStatus from sessions where clientId = 'user3';
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

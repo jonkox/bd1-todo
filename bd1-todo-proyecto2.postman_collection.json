@@ -26,9 +26,9 @@
 			"response": []
 		},
 		{
-			"name": "Find By Rating Id",
+			"name": "New Rating",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [
 					{
 						"key": "x-session-id",
@@ -36,14 +36,18 @@
 						"type": "default"
 					}
 				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ratingValue\": 3,\r\n    \"createdAt\": 2022-05-31\r\n}"
+				},
 				"url": {
-					"raw": "{{base_url}}/ratings/1",
+					"raw": "{{base_url}}/ratings/todo-1",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
 						"ratings",
-						"1"
+						"todo-1"
 					]
 				}
 			},
@@ -75,7 +79,7 @@
 			"response": []
 		},
 		{
-			"name": "validar todo",
+			"name": "Find By Rating Id",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -86,41 +90,13 @@
 					}
 				],
 				"url": {
-					"raw": "{{base_url}}/ratings/todo-",
+					"raw": "{{base_url}}/ratings/2",
 					"host": [
 						"{{base_url}}"
 					],
 					"path": [
 						"ratings",
-						"todo-"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "New Rating",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "x-session-id",
-						"value": "3",
-						"type": "default"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"ratingValue\": 3,\r\n    \"createdAt\": \"todo\"\r\n}"
-				},
-				"url": {
-					"raw": "{{base_url}}/ratings/hola",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"ratings",
-						"hola"
+						"2"
 					]
 				}
 			},
@@ -151,6 +127,30 @@
 			"response": []
 		},
 		{
+			"name": "validar todo",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-session-id",
+						"value": "3",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/ratings/todo-",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"ratings",
+						"todo-"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get Reviews By TodoId",
 			"request": {
 				"method": "GET",
@@ -175,6 +175,34 @@
 			"response": []
 		},
 		{
+			"name": "New Review",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-session-id",
+						"value": "3",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"createdat\": 2022-05-31,\r\n    \"comentario\": \"me parece buena idea!\",\r\n    \"clientid\": \"el-client-id\"\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/reviews/todo-id",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"reviews",
+						"todo-id"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "DEL Review",
 			"request": {
 				"method": "DELETE",
@@ -193,6 +221,34 @@
 					"path": [
 						"reviews",
 						"todo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Review",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-session-id",
+						"value": "3",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"createdat\": 2022-05-31,\r\n    \"comentario\": \"excelente\",\r\n    \"clientid\": \"el-client-id\"\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/reviews/todo-id",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"reviews",
+						"todo-id"
 					]
 				}
 			},

@@ -20,7 +20,7 @@ create table if not exists rating(
     createdat datetime not null
 
 );
--------------------------------------------------------------------------------------------------------------------------
+-- -------------------------------------------------------------------------------------------------------------------------
 
 create table if not exists review(
 	id int primary key auto_increment,
@@ -29,7 +29,7 @@ create table if not exists review(
     comentario varchar(200) not null,
     clientid varchar(50)
 );
--------------------------------------------------------------------------------------------------------------------------
+-- -------------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -51,7 +51,7 @@ create procedure  insert_rating(in ratingvalue_param int,
 begin
 	insert into rating(ratingvalue,todoid,clientid,createdat) values (ratingvalue_param,todoid_param,clientid_param,now());
 end$$
--------------------------------------------------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------------------------------------------------
 drop procedure if exists insert_review;
 delimiter $$
 create procedure  insert_review(in todoid_param varchar(50),
@@ -61,24 +61,30 @@ create procedure  insert_review(in todoid_param varchar(50),
 begin
 	insert into review(todoid,createdat,comentario,clientid) values (todoid_param, createdat_param, comentario_param, clientid_param);
 end$$
--------------------------------------------------------------------------------------------------------------------------
-
-select id, todoid, createdat, comentario, clientid from review where todoid = 'hola';
-
-call insert_review('todo',now(),'muy bueno','jonko');
-
-call insert_rating(5,'todo1','jonko',now());
-call calculate_average_rating('todo');
-
-
-select * from rating;
-select * from review;
-
-delete from rating where todoid = 'todo1' and clientid = 'jonko';
+-- -----------------------------------------------------------------------------------------------------------------------
 
 
 
-Error Code: 1175. You are using safe update mode and you tried to update a table without a WHERE that uses a KEY column.  To disable safe mode, toggle the option in Preferences -> SQL Editor and reconnect.
+call insert_review('todo-1',now(),'muy bueno','jonko');
+call insert_review('todo-2',now(),'muy malo','allan');
+call insert_review('todo-3',now(),'muy bueno','martin');
+call insert_review('todo-4',now(),'regular','daniel');
+call insert_review('todo-5',now(),'increible','ervin');
+call insert_review('todo-6',now(),'perfecto','sharon');
+call insert_review('todo-7',now(),'masomenos','Fabio');
+call insert_review('todo-8',now(),'bueno','Andre');
+call insert_review('todo-9',now(),'muy bueno','Fab');
 
-Error Code: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Error Code: 1175. You are using safe update mode and you tried to update a table' at line 1
+call insert_rating(5,'todo-1','jonko',now());
+call insert_rating(4,'todo-2','allan',now());
+call insert_rating(5,'todo-3','martin',now());
+call insert_rating(3,'todo-4','daniel',now());
+call insert_rating(1,'todo-5','ervin',now());
+call insert_rating(2,'todo-6','sharon',now());
+call insert_rating(4,'todo-7','fabio',now());
+call insert_rating(4,'todo-8','andre',now());
+call insert_rating(5,'todo-9','fab',now());
+
+-- select * from rating;
+-- select * from review;
 

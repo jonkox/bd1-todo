@@ -78,7 +78,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"clientId\": \"un-cliente\",\r\n    \"clientSecret\": \"el-password\"\r\n}"
+					"raw": "{\r\n    \"clientId\": \"jonko\",\r\n    \"clientSecret\": \"1234\"\r\n}"
 				},
 				"url": {
 					"raw": ":8080/sessions",
@@ -111,7 +111,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ":8080/sessions/validate?session=e1dbe86c-e797-11ec-be34-18c04d37801a",
+					"raw": ":8080/sessions/validate?session=3",
 					"port": "8080",
 					"path": [
 						"sessions",
@@ -120,7 +120,7 @@
 					"query": [
 						{
 							"key": "session",
-							"value": "e1dbe86c-e797-11ec-be34-18c04d37801a"
+							"value": "3"
 						}
 					]
 				}
