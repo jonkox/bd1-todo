@@ -1,0 +1,208 @@
+{
+	"info": {
+		"_postman_id": "52b2df06-8b94-47e5-87e2-2ebe44427cfd",
+		"name": "bd1-todo-proyecto2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Options",
+			"request": {
+				"method": "OPTIONS",
+				"header": [
+					{
+						"key": "x-session-id",
+						"value": "3",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}",
+					"host": [
+						"{{base_url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find By Rating Id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-session-id",
+						"value": "3",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/ratings/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"ratings",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Todo Rating Average",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-session-id",
+						"value": "3",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/todos/hola/rating",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"todos",
+						"hola",
+						"rating"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "validar todo",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-session-id",
+						"value": "3",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/ratings/todo-",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"ratings",
+						"todo-"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Rating",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-session-id",
+						"value": "3",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ratingValue\": 3,\r\n    \"createdAt\": \"todo\"\r\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/ratings/hola",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"ratings",
+						"hola"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Rating",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-session-id",
+						"value": "3",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/ratings/todo1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"ratings",
+						"todo1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Reviews By TodoId",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-session-id",
+						"value": "3",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/reviews/todo",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"reviews",
+						"todo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DEL Review",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "x-session-id",
+						"value": "3",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/reviews/todo",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"reviews",
+						"todo"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8082"
+		}
+	]
+}

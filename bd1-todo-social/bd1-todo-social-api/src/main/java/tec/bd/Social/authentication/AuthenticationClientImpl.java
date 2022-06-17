@@ -1,4 +1,4 @@
-package tec.bd.authentication;
+package tec.bd.Social.authentication;
 
 public class AuthenticationClientImpl implements AuthenticationClient{
 
@@ -13,7 +13,7 @@ public class AuthenticationClientImpl implements AuthenticationClient{
             return authenticationResource.validateInServer(session).execute().body();
         } catch (Exception e) {
             e.printStackTrace();
-            return new Session(session, SessionStatus.INACTIVE);
+            return new Session(session, SessionStatus.INACTIVE, "Nope");
         }
     }
 

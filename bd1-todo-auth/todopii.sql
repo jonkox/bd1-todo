@@ -149,6 +149,13 @@ call create_session('jonko',30);
 call create_session('cliente-43',30);
 
 
+select minute(timediff(utc_timestamp(), '2022-06-11 01:02:20'));
+select timestampdiff(minute, now(), utc_timestamp()) as theDiff from sessions;
+select createdat, timestampdiff(minute, createdat, utc_timestamp()) as sessionStatus from sessions;
+select utc_timestamp;
+
+
+select if(timestampdiff(minute, createdat, utc_timestamp()) <= 30, "ACTIVE", "INACTIVE") as sessionStatus from sessions where clientId = 'user3';
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
