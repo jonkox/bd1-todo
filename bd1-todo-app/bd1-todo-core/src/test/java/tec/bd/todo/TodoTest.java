@@ -4,6 +4,7 @@ package tec.bd.todo;
 import org.junit.jupiter.api.Test;
 import tec.bd.todo.repository.TodoRepository;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.UUID;
 

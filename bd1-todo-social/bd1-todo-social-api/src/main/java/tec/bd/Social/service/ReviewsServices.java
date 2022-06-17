@@ -12,7 +12,7 @@ public interface ReviewsServices {
 
     boolean delReview(String todoId, String clientId);
 
-    Review updateReview(String todoId, String clientid);
+    Review updateReview(Review review);
 
 
 }

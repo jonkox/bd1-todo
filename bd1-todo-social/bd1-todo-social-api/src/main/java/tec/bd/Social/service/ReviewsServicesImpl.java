@@ -29,7 +29,7 @@ public class ReviewsServicesImpl implements ReviewsServices{
     }
 
     @Override
-    public Review updateReview(String todoId, String clientid) {
-        return this.reviewsRepository.updateReview(todoId,clientid);
+    public Review updateReview(Review review) {
+        return this.reviewsRepository.updateReview(review);
     }
 }

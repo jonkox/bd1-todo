@@ -15,8 +15,8 @@ public class ReviewsRepositoryImpl extends BaseRepository<Review> implements Rev
     private static final String FIND_BY_RATING_ID_QUERY = "select id,todoid,ratingvalue,createdat,clientid from rating where id = ?";
     private static final String CALCULATE_AVG_PROC = "{CALL calculate_average_rating(?)}";
     private static final String DELETE_REVIEW = "delete from review where todoid = ? and clientid = ?;";
-    private static final String NEW_RATING = "{CALL insert_rating(?,?,?,?);}";
-    private static final String UPDATE = "update review set title = ?, description = ?, state = ?, startdate = ?, enddate = ? where tid = ?";
+    private static final String NEW_REVIEW = "{call insert_review(?,?,?,?)}";
+    private static final String UPDATE = "UPDATE review SET createdat = ?, comentario = ? WHERE todoid = ? and clientid = ?";
 
 
 
@@ -70,6 +70,19 @@ public class ReviewsRepositoryImpl extends BaseRepository<Review> implements Rev
 
     @Override
     public Review newReview(Review review) {
+        try {
+            var connection = this.connect();
+            var statement = connection.prepareCall(NEW_REVIEW);
+            java.sql.Timestamp sqlDate = new java.sql.Timestamp(review.getCreatedat().getTime());
+            statement.setString(1, review.getTodoid());
+            statement.setTimestamp(2, sqlDate);
+            statement.setString(3, review.getComentario());
+            statement.setString(4, review.getClientid());
+            this.execute(statement);
+            return review;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -96,7 +109,20 @@ public class ReviewsRepositoryImpl extends BaseRepository<Review> implements Rev
     }
 
     @Override
-    public Review updateReview(String todoId, String clientid) {
+    public Review updateReview(Review review) {
+        try {
+            var connection = this.connect();
+            var statement = connection.prepareStatement(UPDATE);
+            java.sql.Timestamp sqlDate = new java.sql.Timestamp(review.getCreatedat().getTime());
+            statement.setTimestamp(1, sqlDate);
+            statement.setString(2, review.getComentario());
+            statement.setString(3, review.getTodoid());
+            statement.setString(4, review.getClientid());
+            this.execute(statement);
+            return review;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 }

@@ -13,7 +13,7 @@ public class RatingsRepositoryImpl extends BaseRepository<Rating> implements Rat
     private static final String FIND_BY_RATING_ID_QUERY = "select id,todoid,ratingvalue,createdat,clientid from rating where id = ?";
     private static final String CALCULATE_AVG_PROC = "{CALL calculate_average_rating(?)}";
     private static final String DELETE_RATING = "delete from rating where todoid = ? and clientid = ?;";
-    private static final String NEW_RATING = "{CALL insert_rating(?,?,?,?);}";
+    private static final String NEW_RATING = "{CALL insert_rating(?,?,?,?)}";
 
     public RatingsRepositoryImpl(DBManager dbManager){
         super(dbManager);
@@ -89,28 +89,20 @@ public class RatingsRepositoryImpl extends BaseRepository<Rating> implements Rat
     }
 
     @Override
-    public Rating newRating(Rating newRating) {
+    public Rating newRating(Rating rating) {
         try {
             var connection = this.connect();
-            CallableStatement statement = connection.prepareCall(NEW_RATING);
-
-
-
-            var resultSet = this.query(statement);
-            //var rating = resultSet.getFloat("ratingAvg");
-
-//            while(resultSet.next()) {
-//                var ratingAvg = resultSet.getFloat("ratingAvg");
-//                return ratingAvg;
-//            }
-
-            //return rating;
-
-
+            var statement = connection.prepareCall(NEW_RATING);
+            java.sql.Timestamp sqlDate = new java.sql.Timestamp(rating.getCreatedAt().getTime());
+            statement.setInt(1, rating.getRatingValue());
+            statement.setString(2, rating.getTodoId());
+            statement.setString(3, rating.getClientId());
+            statement.setTimestamp(4, sqlDate);
+            this.execute(statement);
+            return rating;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 

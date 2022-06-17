@@ -5,6 +5,7 @@ import com.google.gson.JsonParser;
 import spark.Request;
 import spark.Response;
 import tec.bd.Social.Rating;
+import tec.bd.Social.Review;
 import tec.bd.Social.authentication.Session;
 import tec.bd.Social.authentication.SessionStatus;
 import tec.bd.Social.repository.NewRating;
@@ -52,47 +53,40 @@ public class SocialApi
         options("/", (request, response) -> {
             response.header("Content-Type", "application/json");
             return Map.of(
-                    "message", "TODOS API V1");
+                    "Message", "SOCIAL API V1",
+                    "POST ratings/:todo-id","Nuevo rating",
+                    "GET ratings/:todo-id","Obtiene el valor promedio de un Todo",
+                    "GET ratings/:todo-id/rating","Obtiene el rating de un todo",
+                    "DELETE /ratings/:todo-id","Borrar un rating",
+                    "GET reviews/:todo-id","Obtener todos los reviews de un todoId",
+                    "POST reviews/:todo-id","Crear nuevo review",
+                    "PUT reviews/:todo-id","Actualizar un comentario de un review",
+                    "DELETE /reviews/:todo-id","Borrar review"
+                    );
         }, gson::toJson);
 
-
-
-
-//        post("/ratings/:todo-id", (request, response) -> {
-//
-//            var sessionParam = request.headers("x-session-id");
-//            var session = authenticationClient.validateSession(sessionParam);
-//            var todoId = request.params("todo-id");
-//            var ratingParams = gson.fromJson(request.body(), Rating.class);
-//
-//            ratingParams.setTodoId(todoId);
-//            ratingParams.setClientId(session.getClientid());
-//
-//            System.out.println(session.getClientid());
-//            System.out.println(sessionParam);
-//
-//            return null;
-//        }, gson::toJson);
 
 
         post("/ratings/:todo-id", (request, response) -> {
             var sessionParam = request.headers("x-session-id");
             var session = authenticationClient.validateSession(sessionParam);
             var todoId = request.params("todo-id");
-            var clientId = session.getClientid();
-            var ratingParams = gson.fromJson(request.body(), Rating.class);
-            ratingParams.setTodoId(todoId);
-            ratingParams.setClientId(clientId);
+            var rating = gson.fromJson(request.body(), Rating.class);
+            rating.setTodoId(todoId);
+            rating.setClientId(session.getClientid());
+//            var todo = authenticationTodoRecord.validateTodo(sessionParam,todoId);
+//            if (null == todo){
+//                halt(404, "Todo Not Found");
+//            }
             try {
-                var rating = ratingsService.newRating(ratingParams);
+                var newRating = ratingsService.newRating(rating);
                 response.status(200);
-                return rating;
+                return Map.of("200", "OK");
             } catch (Exception e) {
                 response.status(400);
-                return Map.of("Message", "Bad Credentials");
+                return Map.of("Message", "Bad Request");
             }
         }, gson::toJson);
-
 
         //Obtiene el valor promedio de los ratings de un todoId
         get("/ratings/:todo-id", (request, response) -> {
@@ -114,15 +108,7 @@ public class SocialApi
             response.status(404);
             return Map.of();
 
-
-//            response.header("Content-Type","application/json");
-//            return Map.of(
-//                    "message","Get ratign for todo-id  " + ratingId);
-
-
         },gson::toJson);
-
-
 
         get("todos/:todo-id/rating", (request, response) -> {
             var todoId = request.params("todo-id");
@@ -138,23 +124,6 @@ public class SocialApi
 
 
         },gson::toJson);
-
-//        //VALIDAR TODO
-//        get("/ratings/:todo-id", (request, response) -> {
-//            var todoId = request.params("todo-id");
-//
-//            var ratingAvg = authenticationTodoRecord.validateTodo()
-//            response.status(200);
-//
-//
-//            response.header("Content-Type","application/json");
-//            return Map.of(
-//                    "rating",ratingAvg,
-//                    "todo-id",todoId );
-//
-//
-//        },gson::toJson);
-
 
         delete("/ratings/:todo-id", (request, response) -> {
             var todoId = request.params("todo-id");
@@ -179,6 +148,41 @@ public class SocialApi
             return reviewsService.getReview(request.params("todo-id"));
         }, gson::toJson);
 
+        post("/reviews/:todo-id", (request, response) -> {
+            var sessionParam = request.headers("x-session-id");
+            var session = authenticationClient.validateSession(sessionParam);
+            var todoId = request.params("todo-id");
+            var review = gson.fromJson(request.body(), Review.class);
+            review.setTodoid(todoId);
+            review.setClientid(session.getClientid());
+            try {
+                var newReview = reviewsService.newReview(review);
+                response.status(200);
+                return Map.of("200", "OK");
+            } catch (Exception e) {
+                response.status(400);
+                return Map.of("Message", "Bad Credentials");
+            }
+        }, gson::toJson);
+
+        put("/reviews/:todo-id", (request, response) -> {
+            var sessionParam = request.headers("x-session-id");
+            var session = authenticationClient.validateSession(sessionParam);
+            var todoId = request.params("todo-id");
+            var review = gson.fromJson(request.body(), Review.class);
+
+            review.setTodoid(todoId);
+            review.setClientid(session.getClientid());
+            try {
+                var newReview = reviewsService.updateReview(review);
+                response.status(200);
+                return Map.of("200", "OK");
+            } catch (Exception e) {
+                response.status(400);
+                return Map.of("Message", "Bad Credentials");
+            }
+        }, gson::toJson);
+
         delete("/reviews/:todo-id", (request, response) -> {
             var todoId = request.params("todo-id");
             var sessionParam = request.headers("x-session-id");
@@ -194,26 +198,6 @@ public class SocialApi
                     "todo-id",todoId );
 
         },gson::toJson);
-
-        put("/reviews/:todo-id", (request, response) -> {
-            var todoId = request.params("todo-id");
-            var sessionParam = request.headers("x-session-id");
-            var session = authenticationClient.validateSession(sessionParam);
-
-            reviewsService.updateReview(todoId,session.getClientid());
-
-            response.status(200);
-
-
-            response.header("Content-Type","application/json");
-            return Map.of(
-                    "todo-id",todoId );
-
-        },gson::toJson);
-
-
-
-
 
     }
 }

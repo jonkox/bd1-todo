@@ -12,6 +12,6 @@ public interface ReviewsRepository {
 
     boolean delReview(String todoId, String clientId);
 
-    Review updateReview(String todoId, String clientid);
+    Review updateReview(Review review);
 
 }
